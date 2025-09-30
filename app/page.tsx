@@ -7,11 +7,11 @@ export default function Home() {
   
 
   return (
-    <>
+    <div className="overflow-hidden">
       <Main />
       <StepsSection />
       <WhyUs />
       <StarOrContact />
-    </>
+    </div>
   );
 }
