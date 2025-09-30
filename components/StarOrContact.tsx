@@ -19,7 +19,7 @@ export default function StarOrContact() {
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
-            href="https://github.com/tuusuario/tu-repo"
+            href="https://github.com/TioDanx/CVAI"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-xl 
@@ -31,7 +31,7 @@ export default function StarOrContact() {
           </a>
 
           <a
-            href="https://www.linkedin.com/in/tu-linkedin/"
+            href="https://www.linkedin.com/in/daniel-campuzano-7149552b7/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-xl 
@@ -43,7 +43,7 @@ export default function StarOrContact() {
           </a>
 
           <a
-            href="mailto:tucorreo@ejemplo.com"
+            href="mailto:danicampu56@gmail.com"
             className="inline-flex items-center gap-2 rounded-xl 
                        bg-white/10 backdrop-blur-md ring-1 ring-white/15
                        px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/20 transition"
