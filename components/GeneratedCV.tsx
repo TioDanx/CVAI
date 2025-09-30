@@ -54,7 +54,6 @@ export default function GeneratedCV({
 
   return (
     <div className="relative">
-      {/* Header actions */}
       <div className="mb-4 flex items-center justify-end">
         <button
           onClick={handleDownloadPDF}
@@ -66,14 +65,13 @@ export default function GeneratedCV({
         </button>
       </div>
 
-      {/* Card */}
       <div
         ref={cvRef}
         className="mx-auto max-w-4xl space-y-8 rounded-2xl border border-white/10
                    bg-white/[0.04] p-6 text-gray-100 shadow-[0_0_0_1px_rgba(255,255,255,0.04)]
                    backdrop-blur-md sm:p-8"
       >
-        {/* Contact / Header */}
+        
         <div>
           <h1 className="mb-1 text-2xl font-bold tracking-tight sm:text-3xl">
             {data.contact_info.name}
@@ -102,7 +100,6 @@ export default function GeneratedCV({
           </div>
         </div>
 
-        {/* Summary */}
         {data.description && (
           <section>
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary/80">
@@ -112,7 +109,6 @@ export default function GeneratedCV({
           </section>
         )}
 
-        {/* Experience */}
         {!!experiences.length && (
           <section>
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary/80">
@@ -144,7 +140,6 @@ export default function GeneratedCV({
           </section>
         )}
 
-        {/* Education */}
         {!!education.length && (
           <section>
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary/80">
@@ -162,7 +157,6 @@ export default function GeneratedCV({
           </section>
         )}
 
-        {/* Skills grid */}
         {(hard.length || soft.length || langs.length) && (
           <section>
             <div className="grid gap-4 sm:grid-cols-3">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserProfile } from "@/contexts/UserProfileContext";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import CVData from "@/types/CVData";
 import GeneratedCV from "@/components/GeneratedCV";
@@ -14,7 +14,7 @@ export default function Personalise() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cvOutput, setCvOutput] = useState<CVData | null>(null);
-  const [pdfLang, setPdfLang] = useState<"es" | "en">("es");
+  const [pdfLang, setPdfLang] = useState<"es" | "en">("en");
 
   const isProfileComplete = useMemo(() => {
     const { name, shortDescription, softSkills, hardSkills, experience, education } = profile || {};
@@ -28,17 +28,15 @@ export default function Personalise() {
     );
   }, [profile]);
 
-
-
   const handleGenerateCV = async () => {
     setError(null);
 
     if (!isProfileComplete) {
-      setError("Tu perfil no está completo. Completalo antes de personalizar tu CV.");
+      setError("Your profile is incomplete. Please fill it out before personalizing your CV.");
       return;
     }
     if (!jobDescription.trim()) {
-      setError("Pegá la oferta laboral para personalizar tu CV.");
+      setError("Paste the job description to personalize your CV.");
       return;
     }
 
@@ -58,7 +56,7 @@ export default function Personalise() {
       setCvOutput(parsed);
     } catch (e) {
       console.error(e);
-      setError("Ocurrió un error al generar el CV.");
+      setError("An error occurred while generating the CV.");
     } finally {
       setIsLoading(false);
     }
@@ -96,20 +94,20 @@ export default function Personalise() {
        
         <header className="mb-6">
           <p className="text-xs font-semibold tracking-widest text-primary/80">
-            PERSONALIZÁ TU CV
+            PERSONALIZE YOUR CV
           </p>
           <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
-            Personalizar CV
+            Personalize CV
           </h1>
           <p className="mt-1 text-sm text-gray-400">
-            Pegá la oferta laboral y generá un CV adaptado. Luego podés descargarlo en PDF.
+            Paste the job description and generate a tailored CV. Then download it as a PDF.
           </p>
         </header>
 
         <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md">
          
           <div className="mb-4 flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-200">Idioma del CV</label>
+            <label className="text-sm font-medium text-gray-200">CV Language</label>
 
             <div className="inline-flex overflow-hidden rounded-xl ring-1 ring-inset ring-white/15">
               <button
@@ -140,14 +138,14 @@ export default function Personalise() {
           </div>
 
           <label htmlFor="jd" className="mb-2 block text-sm font-medium text-gray-200">
-            Oferta laboral
+            Job Description
           </label>
           <textarea
             id="jd"
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Pegá aquí la descripción completa del puesto (responsabilidades, requisitos, skills, etc.)"
+            placeholder="Paste the full job posting here (responsibilities, requirements, skills, etc.)"
             rows={8}
             className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-[var(--primary)]/70 focus:outline-none focus:ring-2 focus:ring-[var(--secondary)]/30"
           />
@@ -158,7 +156,7 @@ export default function Personalise() {
               disabled={isLoading || !jobDescription.trim()}
               className="rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-[var(--secondary)]/40"
             >
-              {isLoading ? "Generando…" : "Personalizar CV"}
+              {isLoading ? "Generating…" : "Generate CV"}
             </button>
 
             {cvOutput && (
@@ -166,7 +164,7 @@ export default function Personalise() {
                 onClick={() => setCvOutput(null)}
                 className="text-sm font-medium text-gray-300 underline-offset-4 hover:text-white hover:underline"
               >
-                Limpiar resultado
+                Clear result
               </button>
             )}
           </div>
@@ -177,7 +175,7 @@ export default function Personalise() {
               {!isProfileComplete && (
                 <p className="mt-1">
                   <Link href="/Profile" className="text-secondary underline underline-offset-4">
-                    Ir a completar perfil
+                    Go to complete profile
                   </Link>
                 </p>
               )}
@@ -188,7 +186,7 @@ export default function Personalise() {
         {cvOutput && (
           <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md">
             <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-secondary/80">
-              Vista previa del CV
+              CV Preview
             </h2>
             <GeneratedCV data={cvOutput} lang={pdfLang} />
           </section>

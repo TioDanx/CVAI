@@ -1,5 +1,4 @@
 import React from "react";
-import Card from "@/components/Card";
 import Link from "next/link";
 import DarkVeil from "./DarkVeil";
 const Main = () => {
@@ -22,9 +21,15 @@ const Main = () => {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/Profile"
-                className="rounded-lg bg-purple-700 px-10 py-3 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 hover:bg-purple-600 transition-all duration-300"
+                className="rounded-lg  px-10 py-3 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 hover:bg-purple-600 transition-all duration-300 bg-gradient-to-r from-black/20 to-primary"
               >
-                Start now
+                Complete your profile
+              </Link>
+              <Link
+                href="/Personalise"
+                className="rounded-lg px-10 py-3 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 hover:bg-secondary transition-all duration-300 bg-gradient-to-r from-black/80 to-secondary"
+              >
+                Generate your CV
               </Link>
             </div>
           </div>

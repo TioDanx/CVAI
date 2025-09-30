@@ -41,24 +41,24 @@ const Footer = () => {
               Novedades
             </h3>
             <p className="mt-2 text-sm text-white/80">
-              Recibí updates y mejoras del generador de CV.
+              Get updates and newer versions from CVAI
             </p>
             <form onSubmit={onSubmit} className="mt-3 flex gap-2">
               <input
                 type="email"
                 required
-                placeholder="tu@email.com"
+                placeholder="your@email.com"
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-900/40"
               />
               <button
                 type="submit"
                 className="whitespace-nowrap rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-950"
               >
-                Suscribirme
+                Suscribe
               </button>
             </form>
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
-              No spam. Podés desuscribirte cuando quieras.
+              No spam. You can unsuscribe anytime.
             </p>
           </div>
 
@@ -69,22 +69,22 @@ const Footer = () => {
             <ul className="mt-3 space-y-2 text-sm">
               <li>
                 <Link href="/Profile" className="hover:text-gray-900 dark:hover:text-white">
-                  Perfil
+                  Profile
                 </Link>
               </li>
               <li>
                 <Link href="/Personalise" className="hover:text-gray-900 dark:hover:text-white">
-                  Personalizar CV
+                  Generate CV
                 </Link>
               </li>
               <li>
                 <Link href="/Donate" className="hover:text-gray-900 dark:hover:text-white">
-                  Donar
+                  Pricing
                 </Link>
               </li>
               <li>
                 <Link href="/Contact" className="hover:text-gray-900 dark:hover:text-white">
-                  Contacto
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -92,7 +92,7 @@ const Footer = () => {
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Conectar
+              Contact
             </h3>
             <div className="mt-3 flex gap-3">
               <a
@@ -121,11 +121,11 @@ const Footer = () => {
 
             <div className="mt-4 text-sm">
               <Link href="/terms" className="hover:text-gray-900 dark:hover:text-white">
-                Términos
+                Terms
               </Link>
               <span className="mx-2 text-gray-400">•</span>
               <Link href="/privacy" className="hover:text-gray-900 dark:hover:text-white">
-                Privacidad
+                Privacity
               </Link>
               <span className="mx-2 text-gray-400">•</span>
               <Link href="/cookies" className="hover:text-gray-900 dark:hover:text-white">
@@ -149,7 +149,7 @@ const Footer = () => {
               aria-label="Volver arriba"
               title="Volver arriba"
             >
-              ↑ Volver arriba
+              ↑ Back on top
             </button>
           </div>
         </div>

@@ -22,14 +22,14 @@ type FormData = {
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input
     {...props}
-    className={`w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-[var(--primary)]/70 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 ${props.className || ""}`}
+    className={`w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/30 ${props.className || ""}`}
   />
 );
 
 const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea
     {...props}
-    className={`w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-[var(--primary)]/70 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 ${props.className || ""}`}
+    className={`w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-gray-400 focus:border-primary/70 focus:outline-none focus:ring-2 focus:ring-primary/30 ${props.className || ""}`}
   />
 );
 
@@ -38,7 +38,7 @@ const Label = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-[var(--primary)]/80">
+  <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-secondary/80">
     {children}
   </h2>
 );
@@ -99,7 +99,7 @@ export default function EditMode({
       await setDoc(userRef, profileData, { merge: true });
       setIsEditing(false);
     } catch (error) {
-      console.error("Error al guardar perfil:", error);
+      console.error("Failed to save profile:", error);
     } finally {
       setIsLoading(false);
     }
@@ -112,69 +112,69 @@ export default function EditMode({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 text-white">
       <section>
-        <SectionTitle>Datos personales</SectionTitle>
+        <SectionTitle>Personal info</SectionTitle>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label>Nombre completo</Label>
-            <Input {...register("name")} placeholder="Ej. Daniela Pérez" />
+            <Label>Full name</Label>
+            <Input {...register("name")} placeholder="e.g., Daniela Pérez" />
           </div>
 
           <div className="sm:col-span-2">
-            <Label>Descripción corta</Label>
-            <Textarea rows={3} {...register("shortDescription")} placeholder="Resumen breve de tu perfil profesional…" />
+            <Label>Short description</Label>
+            <Textarea rows={3} {...register("shortDescription")} placeholder="Brief summary of your professional profile…" />
           </div>
 
           <div>
-            <Label>Teléfono</Label>
-            <Input {...register("phone")} placeholder="Ej. +54 9 11 1234 5678" />
+            <Label>Phone</Label>
+            <Input {...register("phone")} placeholder="e.g., +54 9 11 1234 5678" />
           </div>
           <div>
             <Label>Email</Label>
-            <Input {...register("mail")} placeholder="tu@email.com" />
+            <Input {...register("mail")} placeholder="you@email.com" />
           </div>
 
           <div className="sm:col-span-2">
-            <Label>Idiomas (separados por coma)</Label>
-            <Input {...register("languages")} placeholder="Español, Inglés (B2)" />
+            <Label>Languages (comma-separated)</Label>
+            <Input {...register("languages")} placeholder="Spanish, English (B2)" />
           </div>
         </div>
       </section>
 
       <section>
-        <SectionTitle>Habilidades</SectionTitle>
+        <SectionTitle>Skills</SectionTitle>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <Label>Habilidades duras (coma)</Label>
+            <Label>Hard skills (comma)</Label>
             <Input {...register("hardSkills")} placeholder="React, TypeScript, Testing, SQL…" />
           </div>
           <div>
-            <Label>Habilidades blandas (coma)</Label>
-            <Input {...register("softSkills")} placeholder="Trabajo en equipo, Comunicación…" />
+            <Label>Soft skills (comma)</Label>
+            <Input {...register("softSkills")} placeholder="Teamwork, Communication…" />
           </div>
         </div>
       </section>
 
       <section>
-        <SectionTitle>Experiencia laboral (solo la más relevante)</SectionTitle>
+        <SectionTitle>Work experience (only the most relevant)</SectionTitle>
         <div className="space-y-5">
           {experienceFields.slice(0, 1).map((field, index) => (
             <div key={field.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <Label>Empresa</Label>
-                  <Input {...register(`experience.${index}.company`)} placeholder="Empresa S.A." />
+                  <Label>Company</Label>
+                  <Input {...register(`experience.${index}.company`)} placeholder="Acme Inc." />
                 </div>
                 <div>
-                  <Label>Puesto</Label>
+                  <Label>Role</Label>
                   <Input {...register(`experience.${index}.role`)} placeholder="Front-end Developer" />
                 </div>
                 <div>
-                  <Label>Duración</Label>
-                  <Input {...register(`experience.${index}.duration`)} placeholder="2023 – Presente" />
+                  <Label>Dates</Label>
+                  <Input {...register(`experience.${index}.duration`)} placeholder="2023 – Present" />
                 </div>
                 <div className="sm:col-span-3">
-                  <Label>Descripción</Label>
-                  <Textarea rows={3} {...register(`experience.${index}.description`)} placeholder="Responsabilidades, logros y tecnologías…" />
+                  <Label>Description</Label>
+                  <Textarea rows={3} {...register(`experience.${index}.description`)} placeholder="Responsibilities, achievements, and tech…" />
                 </div>
               </div>
 
@@ -184,7 +184,7 @@ export default function EditMode({
                   onClick={() => removeExperience(index)}
                   className="text-sm font-medium text-rose-400 hover:text-rose-300"
                 >
-                  Eliminar experiencia
+                  Remove experience
                 </button>
               </div>
             </div>
@@ -194,30 +194,30 @@ export default function EditMode({
             <button
               type="button"
               onClick={() => addExperience({ company: "", role: "", duration: "", description: "" })}
-              className="text-sm font-semibold text-[var(--primary)] hover:underline"
+              className="text-sm font-semibold text-primary hover:underline"
             >
-              + Agregar experiencia
+              + Add experience
             </button>
           )}
         </div>
       </section>
 
       <section>
-        <SectionTitle>Educación</SectionTitle>
+        <SectionTitle>Education</SectionTitle>
         <div className="space-y-5">
           {educationFields.map((field, index) => (
             <div key={field.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <Label>Institución</Label>
-                  <Input {...register(`education.${index}.institution`)} placeholder="Universidad / Instituto" />
+                  <Label>Institution</Label>
+                  <Input {...register(`education.${index}.institution`)} placeholder="University / Institute" />
                 </div>
                 <div>
-                  <Label>Título</Label>
-                  <Input {...register(`education.${index}.degree`)} placeholder="Licenciatura / Tecnicatura" />
+                  <Label>Degree</Label>
+                  <Input {...register(`education.${index}.degree`)} placeholder="BSc / Diploma" />
                 </div>
                 <div>
-                  <Label>Año</Label>
+                  <Label>Year</Label>
                   <Input {...register(`education.${index}.year`)} placeholder="2024" />
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function EditMode({
                   onClick={() => removeEducation(index)}
                   className="text-sm font-medium text-rose-400 hover:text-rose-300"
                 >
-                  Eliminar formación
+                  Remove education
                 </button>
               </div>
             </div>
@@ -235,9 +235,9 @@ export default function EditMode({
           <button
             type="button"
             onClick={() => addEducation({ institution: "", degree: "", year: "" })}
-            className="text-sm font-semibold text-[var(--primary)] hover:underline"
+            className="text-sm font-semibold text-primary hover:underline"
           >
-            + Agregar formación
+            + Add education
           </button>
         </div>
       </section>
@@ -245,16 +245,16 @@ export default function EditMode({
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="submit"
-          className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-fuchsia-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/60"
+          className="rounded-lg bg-gradient-to-r from-primary to-fuchsia-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/60"
         >
-          Guardar cambios
+          Save changes
         </button>
         <button
           type="button"
           onClick={() => setIsEditing(false)}
           className="rounded-lg px-4 py-2 text-sm font-semibold text-gray-200 ring-1 ring-inset ring-white/15 hover:bg-white/5"
         >
-          Cancelar
+          Cancel
         </button>
       </div>
     </form>

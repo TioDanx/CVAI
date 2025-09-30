@@ -45,7 +45,7 @@ export default function ViewMode({
       <div className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-xl font-semibold text-white">
-            {profile.name || user.displayName || "Tu nombre"}
+            {profile.name || user.displayName || "Your name"}
           </h3>
           <p className="text-sm text-gray-300">{profile.shortDescription}</p>
         </div>
@@ -54,14 +54,14 @@ export default function ViewMode({
           onClick={() => setIsEditing(true)}
           className="rounded-md px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-white/10 hover:bg-white/5"
         >
-          Editar
+          Edit
         </button>
       </div>
 
-      <Section title="Contacto">
+      <Section title="Contact">
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <p className="text-xs text-gray-400">Teléfono</p>
+            <p className="text-xs text-gray-400">Phone</p>
             <p className="text-sm text-gray-100">{profile.phone || "—"}</p>
           </div>
           <div>
@@ -69,7 +69,7 @@ export default function ViewMode({
             <p className="break-all text-sm text-gray-100">{profile.mail || "—"}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400">Idiomas</p>
+            <p className="text-xs text-gray-400">Languages</p>
             <div className="mt-1 flex flex-wrap gap-2">
               {languages.length ? languages.map((l) => <Chip key={l}>{l}</Chip>) : "—"}
             </div>
@@ -77,7 +77,7 @@ export default function ViewMode({
         </div>
       </Section>
 
-      <Section title="Habilidades">
+      <Section title="Skills">
         <div className="grid gap-6 sm:grid-cols-2">
           <div>
             <p className="mb-2 text-sm font-medium text-gray-200">Hard skills</p>
@@ -86,7 +86,7 @@ export default function ViewMode({
             </div>
           </div>
           <div>
-            <p className="mb-2 text-sm font-medium text-gray-2 00">Soft skills</p>
+            <p className="mb-2 text-sm font-medium text-gray-200">Soft skills</p>
             <div className="flex flex-wrap gap-2">
               {softSkills.length ? softSkills.map((s) => <Chip key={s}>{s}</Chip>) : "—"}
             </div>
@@ -94,7 +94,7 @@ export default function ViewMode({
         </div>
       </Section>
 
-      <Section title="Experiencia laboral">
+      <Section title="Work experience">
         <ul className="space-y-4">
           {profile.experience?.length ? (
             profile.experience.map((exp, i) => (
@@ -113,12 +113,12 @@ export default function ViewMode({
               </li>
             ))
           ) : (
-            <li className="text-sm text-gray-300">Sin experiencia cargada.</li>
+            <li className="text-sm text-gray-300">No experience added yet.</li>
           )}
         </ul>
       </Section>
 
-      <Section title="Educación">
+      <Section title="Education">
         <ul className="space-y-2">
           {profile.education?.length ? (
             profile.education.map((edu, i) => (
@@ -129,7 +129,7 @@ export default function ViewMode({
               </li>
             ))
           ) : (
-            <li className="text-sm text-gray-300">Sin formación cargada.</li>
+            <li className="text-sm text-gray-300">No education added yet.</li>
           )}
         </ul>
       </Section>

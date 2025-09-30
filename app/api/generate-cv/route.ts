@@ -1,4 +1,3 @@
-// app/api/generate-cv/route.ts
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 

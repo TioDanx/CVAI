@@ -13,7 +13,6 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const PRIMARY = "#3C005E";
 
 const HeaderContent = () => {
   const { user, logout } = useAuth();
@@ -34,10 +33,10 @@ const HeaderContent = () => {
   const NavLinks = ({ onClick }: { onClick?: () => void }) => (
     <>
       {[
-        { href: "/Profile", label: "Perfil" },
-        { href: "/Personalise", label: "Personalizar CV" },
-        { href: "/Donate", label: "Donar" },
-        { href: "/Contact", label: "Contacto" },
+        { href: "/Profile", label: "Profile" },
+        { href: "/Personalise", label: "Generate CV" },
+        { href: "/Donate", label: "Donate" },
+        { href: "/Contact", label: "Contact" },
       ].map((l) => (
         <Link
           key={l.href}

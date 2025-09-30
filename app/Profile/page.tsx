@@ -16,13 +16,12 @@ export default function ProfilePage() {
   if (!user)
     return (
       <section className="mx-auto max-w-5xl px-4 py-24 text-center text-gray-300">
-        Iniciá sesión para ver tu perfil
+        Please sign in to view your profile
       </section>
     );
 
   return (
     <section className="relative isolate min-h-dvh w-full bg-black">
-      {/* Glow primario contenido */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="
@@ -41,11 +40,10 @@ export default function ProfilePage() {
               YOUR PROFILE
             </p>
             <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
-              Mi perfil
+              My Profile
             </h1>
             <p className="mt-1 text-sm text-gray-400">
-              Actualizá tu información personal y laboral para generar CVs
-              adaptados a cada oferta.
+              Keep your personal and work info up to date to generate tailored CVs for each role.
             </p>
           </div>
 
@@ -54,7 +52,7 @@ export default function ProfilePage() {
               onClick={() => setIsEditing(true)}
               className="rounded-lg bg-gradient-to-r from-[var(--primary)] to-fuchsia-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-fuchsia-400/60"
             >
-              Editar perfil
+              Edit profile
             </button>
           )}
         </header>
