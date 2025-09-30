@@ -58,7 +58,6 @@ const HeaderContent = () => {
       setMobileOpen(false);
     } catch (e) {
       console.error("Google login failed", e);
-      // opcional: mostrar toast/toaster si tenés uno
     } finally {
       setAuthLoading(false);
     }
@@ -126,7 +125,6 @@ const HeaderContent = () => {
         )}
       </div>
 
-      {/* Mobile drawer */}
       <div
         className={`fixed inset-0 z-40 transition-opacity duration-300 ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
