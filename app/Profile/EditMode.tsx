@@ -87,6 +87,7 @@ export default function EditMode({
 
     const profileData: UserProfile = {
       ...data,
+      // eslint-disable-next-line
       experience: oneExperience as any,
       softSkills: normalizeCsv(data.softSkills),
       hardSkills: normalizeCsv(data.hardSkills),
