@@ -2,7 +2,6 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
-import ModalLogin from "@/components/ModalLogin";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -13,12 +12,11 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-
 const HeaderContent = () => {
-  const { user, logout } = useAuth();
-  const [showModal, setShowModal] = useState(false);
+  const { user, logout, loginWithGoogle } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -52,6 +50,19 @@ const HeaderContent = () => {
       ))}
     </>
   );
+
+  const handleGoogleLogin = async () => {
+    try {
+      setAuthLoading(true);
+      await loginWithGoogle();
+      setMobileOpen(false);
+    } catch (e) {
+      console.error("Google login failed", e);
+      // opcional: mostrar toast/toaster si tenés uno
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   return (
     <header className={`sticky top-0 z-50 ${jakarta.className} transition-all duration-300`}>
@@ -103,20 +114,19 @@ const HeaderContent = () => {
             />
           </div>
         ) : (
-          <>
-            <button
-              onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 rounded-lg 
-                bg-gradient-to-r from-pink-500 to-purple-700
-                px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95"
-            >
-              Iniciar sesión
-            </button>
-            {showModal && <ModalLogin onClose={() => setShowModal(false)} />}
-          </>
+          <button
+            onClick={handleGoogleLogin}
+            disabled={authLoading}
+            className="inline-flex items-center gap-2 rounded-lg 
+              bg-gradient-to-r from-pink-500 to-purple-700
+              px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 disabled:opacity-60"
+          >
+            {authLoading ? "Conectando…" : "Iniciar sesión"}
+          </button>
         )}
       </div>
 
+      {/* Mobile drawer */}
       <div
         className={`fixed inset-0 z-40 transition-opacity duration-300 ${
           mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -166,13 +176,11 @@ const HeaderContent = () => {
               </button>
             ) : (
               <button
-                onClick={() => {
-                  setShowModal(true);
-                  setMobileOpen(false);
-                }}
-                className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-purple-700 px-4 py-2 text-sm font-semibold text-white"
+                onClick={handleGoogleLogin}
+                disabled={authLoading}
+                className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-purple-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
               >
-                Iniciar sesión
+                {authLoading ? "Conectando…" : "Iniciar sesión"}
               </button>
             )}
           </div>
