@@ -11,11 +11,11 @@ const Main = () => {
         <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16 flex flex-column justify-center items-center h-full">
           <div className="max-w-3xl ">
             <h1 className="text-6xl sm:text-8xl font-bold tracking-tight text-white -mt-[20%]">
-              Generate personalised CV's based on real job offers
+              Generate personalised CV&apos;s based on real job offers
             </h1>
             <p className="mt-3 text-base sm:text-lg text-white/90 w-[70%]">
-              Create a profile and start sending custom-made CV's that
-              recruiters just can't ignore.
+              Create a profile and start sending custom-made CV&apos;s that
+              recruiters just can&apos;t ignore.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
