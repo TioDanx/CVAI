@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { adminAuth, adminDb, FieldValue, serverTimestamp } from "@/lib/firebaseAdmin";
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
@@ -11,19 +12,51 @@ type LangParam = "es" | "en" | "auto";
 
 export async function POST(req: Request) {
   try {
+    const authHeader = req.headers.get("authorization") || "";
+    const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+    if (!idToken) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const decoded = await adminAuth.verifyIdToken(idToken).catch(() => null);
+    if (!decoded?.uid) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const uid = decoded.uid;
+
     const body = await req.json().catch(() => ({}));
-    const { profile, jobDescription, targetLang }: { profile: unknown; jobDescription: string; targetLang?: LangParam } = body || {};
+    const {
+      profile,
+      jobDescription,
+      targetLang,
+    }: { profile: unknown; jobDescription: string; targetLang?: LangParam } = body || {};
 
     if (!profile || typeof jobDescription !== "string" || !jobDescription.trim()) {
       return NextResponse.json(
-        { error: "profile y jobDescription son requeridos" },
+        { error: "profile y jobDescription are required" },
         { status: 400 }
       );
     }
 
-    const lang: LangParam = (["es", "en", "auto"] as const).includes(targetLang as LangParam)
-      ? (targetLang as LangParam)
-      : "auto";
+    const userRef = adminDb.doc(`users/${uid}`);
+    const userSnap = await userRef.get();
+    let credits = userSnap.get("cvCredits") as number | undefined;
+
+    if (credits === undefined) {
+      await userRef.set({ cvCredits: 3, createdAt: serverTimestamp() }, { merge: true });
+      credits = 3;
+    }
+
+    if (credits <= 0) {
+      return NextResponse.json(
+        { error: "No free CVs left. Upgrade to continue.", remaining: 0, code: "NO_CREDITS" },
+        { status: 402 }
+      );
+    }
+
+    const lang: LangParam =
+      (["es", "en", "auto"] as const).includes(targetLang as LangParam) ? (targetLang as LangParam) : "auto";
 
     const langRule =
       lang === "en"
@@ -117,19 +150,13 @@ Devolvé **exclusivamente** un objeto JSON válido, **sin** bloques de código, 
 `.trim();
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
     const result = await model.generateContent(prompt);
     const response = await result.response;
     let text = (response?.text?.() ?? "").trim();
 
     const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-    if (fenceMatch?.[1]) {
-      text = fenceMatch[1].trim();
-    }
-    if (text.startsWith("json\n")) {
-      text = text.slice(5).trim();
-    }
-
+    if (fenceMatch?.[1]) text = fenceMatch[1].trim();
+    if (text.startsWith("json\n")) text = text.slice(5).trim();
     if (!(text.startsWith("{") && text.endsWith("}"))) {
       const first = text.indexOf("{");
       const last = text.lastIndexOf("}");
@@ -138,15 +165,37 @@ Devolvé **exclusivamente** un objeto JSON válido, **sin** bloques de código, 
       }
     }
 
+    let remainingAfter = credits;
+    await adminDb.runTransaction(async (tx) => {
+      const snap = await tx.get(userRef);
+      const current = (snap.get("cvCredits") as number | undefined) ?? 0;
+      if (current <= 0) {
+        throw new Error("NO_CREDITS"); 
+      }
+      tx.update(userRef, {
+        cvCredits: FieldValue.increment(-1),
+        lastCvAt: serverTimestamp(),
+      });
+      remainingAfter = current - 1;
+    }).catch((e) => {
+      if (String(e?.message) === "NO_CREDITS") {
+        throw new Error("NO_CREDITS_AFTER_GEN");
+      }
+      throw e;
+    });
+
     return NextResponse.json(
-      { text },
+      { text, remaining: remainingAfter },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch (err) {
+  } catch (err: any) {
+    if (String(err?.message) === "NO_CREDITS_AFTER_GEN") {
+      return NextResponse.json(
+        { error: "No free CVs left. Upgrade to continue.", remaining: 0, code: "NO_CREDITS" },
+        { status: 402 }
+      );
+    }
     console.error("generate-cv error", err);
-    return NextResponse.json(
-      { error: "No se pudo generar el CV" },
-      { status: 502 }
-    );
+    return NextResponse.json({ error: "There was an error generating the CV" }, { status: 502 });
   }
 }

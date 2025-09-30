@@ -11,9 +11,11 @@
   "dependencies": {
     "@deemlol/next-icons": "^0.1.9",
     "@google/generative-ai": "^0.24.1",
+    "@pablotheblink/flashyjs": "^1.0.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^11.10.0",
+    "firebase-admin": "^13.5.0",
     "html2canvas": "^1.4.1",
     "html2canvas-pro": "^1.5.11",
     "html2pdf.js": "^0.10.3",

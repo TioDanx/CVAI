@@ -1,10 +1,12 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import flashy from "@pablotheblink/flashyjs";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import { useAuth } from "@/contexts/AuthContext";
+import QuotaBadge from "@/components/QuotaBadge";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -33,7 +35,7 @@ const HeaderContent = () => {
       {[
         { href: "/Profile", label: "Profile" },
         { href: "/Personalise", label: "Generate CV" },
-        { href: "/Donate", label: "Donate" },
+        { href: "/Pricing", label: "Pricing" },
         { href: "/Contact", label: "Contact" },
       ].map((l) => (
         <Link
@@ -56,21 +58,25 @@ const HeaderContent = () => {
       setAuthLoading(true);
       await loginWithGoogle();
       setMobileOpen(false);
+      flashy.success("Logged in!");
     } catch (e) {
       console.error("Google login failed", e);
+      flashy.error("Something went wrong! Try again");
     } finally {
       setAuthLoading(false);
     }
   };
 
   return (
-    <header className={`sticky top-0 z-50 ${jakarta.className} transition-all duration-300`}>
+    <header
+      className={`sticky top-0 z-50 ${jakarta.className} transition-all duration-300`}
+    >
       <div
         className={`mx-auto max-w-6xl px-4 ${
-          scrolled ? "h-14" : "h-16"
+          scrolled ? "h-15 px-6" : "h-16 px-8 md:px-10"
         } flex items-center justify-between rounded-b-2xl
         backdrop-blur-xl bg-gradient-to-r from-[#3C005E]/90 via-purple-700/70 to-[#3C005E]/90
-        shadow-[0_2px_20px_rgba(60,0,94,0.3)] transition-all duration-300`}
+        shadow-[0_2px_20px_rgba(60,0,94,0.3)] transition-all duration-300 `}
       >
         <div className="flex items-center gap-3">
           <button
@@ -79,7 +85,12 @@ const HeaderContent = () => {
             aria-label="Open menu"
           >
             <svg width="22" height="22" viewBox="0 0 24 24">
-              <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path
+                d="M3 6h18M3 12h18M3 18h18"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
 
@@ -98,11 +109,12 @@ const HeaderContent = () => {
 
         {user ? (
           <div className="flex items-center gap-3">
+            <QuotaBadge uid={user.uid} />
             <button
               onClick={logout}
               className="text-sm font-medium text-pink-300 hover:text-white transition-colors"
             >
-              Cerrar sesión
+              Log out
             </button>
             <Image
               src={user.photoURL || "/default-avatar.jpg"}
@@ -120,14 +132,16 @@ const HeaderContent = () => {
               bg-gradient-to-r from-pink-500 to-purple-700
               px-4 py-2 text-sm font-semibold text-white shadow-md hover:opacity-95 disabled:opacity-60"
           >
-            {authLoading ? "Conectando…" : "Iniciar sesión"}
+            {authLoading ? "Connecting" : "Log in"}
           </button>
         )}
       </div>
 
       <div
         className={`fixed inset-0 z-40 transition-opacity duration-300 ${
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          mobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
       >
         <div
@@ -152,7 +166,12 @@ const HeaderContent = () => {
               className="rounded-lg p-2 text-white hover:bg-white/10"
             >
               <svg width="20" height="20" viewBox="0 0 24 24">
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             </button>
           </div>
@@ -161,7 +180,23 @@ const HeaderContent = () => {
             <NavLinks onClick={() => setMobileOpen(false)} />
           </nav>
 
+          {user && (
+            <div className="mt-4 px-6">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-300">Remaining CVs:</span>
+              </div>
+            </div>
+          )}
+
           <div className="mt-6 border-t border-white/20 px-6 pt-4">
+            {user && (
+              <div className="mt-4 px-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-300">Remaining CVs:</span>
+                  <QuotaBadge uid={user.uid} />
+                </div>
+              </div>
+            )}
             {user ? (
               <button
                 onClick={() => {
@@ -170,7 +205,7 @@ const HeaderContent = () => {
                 }}
                 className="w-full rounded-lg bg-pink-500 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-600"
               >
-                Cerrar sesión
+                Log out
               </button>
             ) : (
               <button
@@ -178,7 +213,7 @@ const HeaderContent = () => {
                 disabled={authLoading}
                 className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-purple-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
               >
-                {authLoading ? "Conectando…" : "Iniciar sesión"}
+                {authLoading ? "Connecting…" : "Log in"}
               </button>
             )}
           </div>

@@ -1,11 +1,11 @@
 "use client";
-
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import CVData from "@/types/CVData";
 import GeneratedCV from "@/components/GeneratedCV";
 import GeneratingOverlay from "@/components/GeneratingOverlay";
+import { auth } from '@/lib/firebase'
 
 export default function Personalise() {
   const { profile } = useUserProfile();
@@ -17,7 +17,14 @@ export default function Personalise() {
   const [pdfLang, setPdfLang] = useState<"es" | "en">("en");
 
   const isProfileComplete = useMemo(() => {
-    const { name, shortDescription, softSkills, hardSkills, experience, education } = profile || {};
+    const {
+      name,
+      shortDescription,
+      softSkills,
+      hardSkills,
+      experience,
+      education,
+    } = profile || {};
     return Boolean(
       name &&
         shortDescription &&
@@ -32,7 +39,9 @@ export default function Personalise() {
     setError(null);
 
     if (!isProfileComplete) {
-      setError("Your profile is incomplete. Please fill it out before personalizing your CV.");
+      setError(
+        "Your profile is incomplete. Please fill it out before personalizing your CV."
+      );
       return;
     }
     if (!jobDescription.trim()) {
@@ -42,16 +51,22 @@ export default function Personalise() {
 
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/generate-cv`, {
+      const token = await auth.currentUser?.getIdToken();
+      const res = await fetch("/api/generate-cv", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ profile, jobDescription, targetLang: pdfLang }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ profile, jobDescription, pdfLang }),
       });
-
       if (!res.ok) throw new Error("Bad response");
 
       const data = await res.json();
-      const cleaned = (data.text ?? data).toString().replace(/```json|```/g, "").trim();
+      const cleaned = (data.text ?? data)
+        .toString()
+        .replace(/```json|```/g, "")
+        .trim();
       const parsed: CVData = JSON.parse(cleaned);
       setCvOutput(parsed);
     } catch (e) {
@@ -62,7 +77,9 @@ export default function Personalise() {
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+    e
+  ) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
       e.preventDefault();
       if (!isLoading) handleGenerateCV();
@@ -76,7 +93,7 @@ export default function Personalise() {
           className="
             absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/4
             h-[66vmin] w-[66vmin] rounded-full opacity-30 blur-[100px]
-            bg-[radial-gradient(circle_at_50%_50%,_var(--primary)_0%,_transparent_60%)]
+            bg-[radial-gradient(circle_at_50%_50%,_var(--secondary)_0%,_transparent_60%)]
           "
         />
         <div
@@ -91,23 +108,24 @@ export default function Personalise() {
       <GeneratingOverlay open={isLoading} />
 
       <div className="relative mx-auto w-full max-w-5xl px-4 py-10">
-       
         <header className="mb-6">
-          <p className="text-xs font-semibold tracking-widest text-primary/80">
+          <p className="text-xs font-semibold tracking-widest text-secondary/80">
             PERSONALIZE YOUR CV
           </p>
           <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
             Personalize CV
           </h1>
           <p className="mt-1 text-sm text-gray-400">
-            Paste the job description and generate a tailored CV. Then download it as a PDF.
+            Paste the job description and generate a tailored CV. Then download
+            it as a PDF.
           </p>
         </header>
 
         <section className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-md">
-         
           <div className="mb-4 flex items-center gap-3">
-            <label className="text-sm font-medium text-gray-200">CV Language</label>
+            <label className="text-sm font-medium text-gray-200">
+              CV Language
+            </label>
 
             <div className="inline-flex overflow-hidden rounded-xl ring-1 ring-inset ring-white/15">
               <button
@@ -137,7 +155,10 @@ export default function Personalise() {
             </div>
           </div>
 
-          <label htmlFor="jd" className="mb-2 block text-sm font-medium text-gray-200">
+          <label
+            htmlFor="jd"
+            className="mb-2 block text-sm font-medium text-gray-200"
+          >
             Job Description
           </label>
           <textarea
@@ -174,7 +195,10 @@ export default function Personalise() {
               <p>{error}</p>
               {!isProfileComplete && (
                 <p className="mt-1">
-                  <Link href="/Profile" className="text-secondary underline underline-offset-4">
+                  <Link
+                    href="/Profile"
+                    className="text-secondary underline underline-offset-4"
+                  >
                     Go to complete profile
                   </Link>
                 </p>
