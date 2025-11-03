@@ -9,7 +9,7 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey);
 
 type LangParam = "es" | "en" | "auto";
-type Error = {
+type MyError = {
   message: string
 }
 export async function POST(req: Request) {
@@ -191,14 +191,14 @@ Devolvé exclusivamente un objeto JSON válido, sin bloques de código, sin text
       { text, remaining: remainingAfter },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch (err: Error) {
-    if (String(err?.message) === "NO_CREDITS_AFTER_GEN") {
+  } catch (e: MyError | any) {
+    if (String(e?.message) === "NO_CREDITS_AFTER_GEN") {
       return NextResponse.json(
         { error: "No free CVs left. Upgrade to continue.", remaining: 0, code: "NO_CREDITS" },
         { status: 402 }
       );
     }
-    console.error("generate-cv error", err);
+    console.error("generate-cv error", e);
     return NextResponse.json({ error: "There was an error generating the CV" }, { status: 502 });
   }
 }
