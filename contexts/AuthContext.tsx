@@ -7,8 +7,9 @@ import {
   onAuthStateChanged,
   User
 } from 'firebase/auth'
-import { auth } from '@/lib/firebase'
+import { db, auth } from '@/lib/firebase'
 import {useState, useEffect, createContext, useContext} from 'react'
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export interface AuthContextType {
   user: User | null
@@ -24,21 +25,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser)
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      setUser(u)
+      if (u) await ensureUserDoc(u)
+    })
     return () => unsubscribe()
   }, [])
 
+  const ensureUserDoc = async (u: User) => {
+    const ref = doc(db, "users", u.uid)
+    const snap = await getDoc(ref)
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        cvCredits: 5,
+        cvUsed: 0,
+        unlimited: false,
+        createdAt: serverTimestamp(),
+        email: u.email ?? "",
+        name: u.displayName ?? "",
+        photoURL: u.photoURL ?? ""
+      })
+    }
+  }
+
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
-    await signInWithPopup(auth, provider)
+    const result = await signInWithPopup(auth, provider)
+    await ensureUserDoc(result.user)
   }
 
   const loginWithEmail = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password)
+    const cred = await signInWithEmailAndPassword(auth, email, password)
+    await ensureUserDoc(cred.user)
   }
 
   const registerWithEmail = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password)
+    const cred = await createUserWithEmailAndPassword(auth, email, password)
+    await ensureUserDoc(cred.user)
   }
 
   const logout = async () => {
@@ -53,6 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   )
 }
+
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext)
   if (!context) {

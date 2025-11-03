@@ -2,7 +2,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 export default function StarOrContact() {
   return (
-    <section className="relative w-full bg-black py-20">
+    <section className="relative w-full bg-black py-20" id="StarOrContact">
       <div className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(50%_50%_at_50%_40%,black,transparent)]">
         <div className="absolute top-1/2 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full
                         bg-[var(--primary)]/30 blur-[150px]" />

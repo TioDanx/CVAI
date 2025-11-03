@@ -36,12 +36,20 @@ const HeaderContent = () => {
         { href: "/Profile", label: "Profile" },
         { href: "/Personalise", label: "Generate CV" },
         { href: "/Pricing", label: "Pricing" },
-        { href: "/Contact", label: "Contact" },
+        { href: "#StarOrContact", label: "Contact" },
       ].map((l) => (
         <Link
           key={l.href}
           href={l.href}
-          onClick={onClick}
+          onClick={(e) => {
+            if (l.href.startsWith("#")) {
+              e.preventDefault();
+              const el = document.getElementById("StarOrContact");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            } else {
+              onClick?.();
+            }
+          }}
           className={`relative text-sm text-gray-200 hover:text-white transition-colors
             after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 
             after:bg-gradient-to-r after:from-purple-400 after:to-pink-400 
@@ -191,7 +199,7 @@ const HeaderContent = () => {
           <div className="mt-6 border-t border-white/20 px-6 pt-4">
             {user && (
               <div className="mt-4 px-6">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mb-4 sm:mb-0">
                   <span className="text-sm text-gray-300">Remaining CVs:</span>
                   <QuotaBadge uid={user.uid} />
                 </div>

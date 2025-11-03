@@ -10,7 +10,7 @@ export default function QuotaBadge({ uid }: { uid?: string | null }) {
   return (
     <span
       title={unlimited ? "Unlimited CVs" : "Remaining CVs"}
-      className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white ring-1 ring-white/15"
+      className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white ring-1 ring-white/15 "
     >
       <svg width="14" height="14" viewBox="0 0 24 24" className="opacity-80">
         <path
