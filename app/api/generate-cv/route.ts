@@ -9,7 +9,9 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey);
 
 type LangParam = "es" | "en" | "auto";
-
+type Error = {
+  message: string
+}
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get("authorization") || "";
@@ -109,6 +111,7 @@ ${jd}
 ${langRule}
 
 # INSTRUCCIONES
+- es COMPLETAMENTE OBLIGATORIO que el rol del CV coincida exactamente con el rol de la oferta.
 - No inventes empresas, títulos, formaciones, fechas ni tecnologías que la persona no tenga.
 - Reformulá, resumí y priorizá lo más relevante para esta oferta.
 - Usá keywords de la oferta solo cuando tenga sentido.
@@ -188,7 +191,7 @@ Devolvé exclusivamente un objeto JSON válido, sin bloques de código, sin text
       { text, remaining: remainingAfter },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch (err: any) {
+  } catch (err: Error) {
     if (String(err?.message) === "NO_CREDITS_AFTER_GEN") {
       return NextResponse.json(
         { error: "No free CVs left. Upgrade to continue.", remaining: 0, code: "NO_CREDITS" },
